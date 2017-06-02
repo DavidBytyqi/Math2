@@ -1,5 +1,4 @@
 package com.example.david.math;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -10,23 +9,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Random;
 
-import static android.R.attr.data;
-import static android.R.attr.text;
-
 public class Math extends AppCompatActivity {
-    ImageView f1, f2, f3, f21, f22, f31, f32, f33, result;
+    ImageView f2, f3, f21, f22, f31, f32, f33, result;
     String fruits[]={"apple", "pear", "strawberry"};
+    int n1,n2,n3,n4,n5;
     int value[]=new int[3];
     int playCounter=0;
     EditText textNr;
     TextView answer1;
     TextView answer2;
     TextView answer3;
-    Button button;
+    TextView nr1, nr2, nr3, nr4, nr5;
+    Button button, startButton;
     private int score=0;
 
     @Override
@@ -34,7 +31,6 @@ public class Math extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_math);
-        f1=(ImageView)findViewById(R.id.f1);
         f2=(ImageView)findViewById(R.id.f2);
         f3=(ImageView)findViewById(R.id.f3);
         f21=(ImageView)findViewById(R.id.f21);
@@ -47,13 +43,13 @@ public class Math extends AppCompatActivity {
         answer1=(TextView)findViewById(R.id.answer1);
         answer2=(TextView)findViewById(R.id.answer2);
         answer3=(TextView)findViewById(R.id.answer3);
+        nr1=(TextView)findViewById(R.id.nr1);
+        nr2=(TextView)findViewById(R.id.nr2);
+        nr3=(TextView)findViewById(R.id.nr3);
+        nr4=(TextView)findViewById(R.id.nr4);
+        nr5=(TextView)findViewById(R.id.nr5);
         button=(Button)findViewById(R.id.button);
-
-
-
         startGame();
-
-
     }
     private void putFruits(){
     Random randomOne=new Random();
@@ -75,10 +71,14 @@ public class Math extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                playCounter++;
+                if(playCounter>11){
+                    endGame();
+                }
                 button.setText("NEXT");
                 textNr=(EditText)findViewById(R.id.rightAnswer);
                 String num=textNr.getText().toString();
-                if(Integer.toString(value[2]).equals(num)){
+                if(Integer.toString(value[2]*n5).equals(num)){
                     score++;
                 }
                 textNr.setText("");
@@ -93,17 +93,14 @@ public class Math extends AppCompatActivity {
 
     private void play(){
         if(fruits[0].equals("apple")){
-            f1.setImageResource(R.drawable.apple);
             f2.setImageResource(R.drawable.apple);
             f3.setImageResource(R.drawable.apple);
             f31.setImageResource(R.drawable.apple);
         }else if(fruits[0].equals("pear")){
-            f1.setImageResource(R.drawable.pear);
             f2.setImageResource(R.drawable.pear);
             f3.setImageResource(R.drawable.pear);
             f31.setImageResource(R.drawable.pear);
         }else if(fruits[0].equals("strawberry")){
-            f1.setImageResource(R.drawable.strawberry);
             f2.setImageResource(R.drawable.strawberry);
             f3.setImageResource(R.drawable.strawberry);
             f31.setImageResource(R.drawable.strawberry);
@@ -134,20 +131,32 @@ public class Math extends AppCompatActivity {
             f33.setImageResource(R.drawable.strawberry);
             result.setImageResource(R.drawable.strawberry);
         }
-
+        calculateNumbers();
         calculateValues();
 
     }
-    private void calculateValues(){
 
+    private void calculateNumbers() {
+        Random r=new Random();
+        n1=r.nextInt(9)+1;
+        n2=r.nextInt(9)+1;
+        n3=r.nextInt(9)+1;
+        n4=r.nextInt(9)+1;
+        n5=r.nextInt(9)+1;
+        nr1.setText(""+n1);
+        nr2.setText(""+n2);
+        nr3.setText(""+n3);
+        nr4.setText(""+n4);
+        nr5.setText(""+n5);
+    }
+
+    private void calculateValues(){
         int first=value[0];
         int second=value[1];
         int third=value[2];
-        int firstL=value[0]*3;
-        int secondL=value[1]*2;
+        int firstL=n1*value[0]+n2*value[0];
+        int secondL=n3*value[1]+n4*value[1];
         int thirdL=first+second+third;
-        System.out.println(third);
-        String res=Integer.toString(third);
 
         String firstLine=Integer.toString(firstL);
         String secondLine=Integer.toString(secondL);
@@ -157,10 +166,6 @@ public class Math extends AppCompatActivity {
         answer2.setText(secondLine);
         answer3.setText(thirdLine);
 
-        playCounter++;
-            if(playCounter>=10){
-                endGame();
-            }
         }
 
     private void endGame() {
